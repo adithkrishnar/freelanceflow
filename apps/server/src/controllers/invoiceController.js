@@ -362,8 +362,7 @@ export const updateInvoiceStatus = async (
     const { status } = req.body;
 
     const validStatuses = [
-      "DRAFT",
-      "SENT",
+      "PENDING",
       "PAID",
     ];
 

@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { BriefcaseBusiness, LoaderCircle } from "lucide-react";
+import { BriefcaseBusiness } from "lucide-react";
+import { toast } from "react-hot-toast";
+import { motion } from "framer-motion";
 
 import api from "../api/api";
 import { useAuth } from "../context/AuthContext";
+import Button from "../components/Button";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -13,38 +16,23 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-
-  const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-
-    setFormData((current) => ({
-      ...current,
-      [name]: value,
-    }));
+    setFormData((current) => ({ ...current, [name]: value }));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    setError("");
     setSubmitting(true);
 
     try {
       const response = await api.post("/auth/login", formData);
-
       login(response.data.token, response.data.user);
-
-      navigate("/dashboard", {
-        replace: true,
-      });
+      navigate("/dashboard", { replace: true });
     } catch (error) {
-      setError(
-        error.response?.data?.message ||
-          "Unable to sign in. Please try again."
-      );
+      toast.error(error.response?.data?.message || "Unable to sign in. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -52,79 +40,75 @@ const LoginPage = () => {
 
   return (
     <main className="grid min-h-screen lg:grid-cols-2">
-      <section className="hidden bg-slate-950 p-12 text-white lg:flex lg:flex-col lg:justify-between">
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-slate-950">
+      <section className="relative hidden bg-slate-950 p-12 text-white lg:flex lg:flex-col lg:justify-between overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/20 to-transparent pointer-events-none" />
+        
+        <div className="relative z-10 flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[var(--color-primary)]">
             <BriefcaseBusiness size={22} />
           </div>
-
-          <span className="text-xl font-bold">
+          <span className="text-xl font-bold tracking-tight">
             FreelanceFlow
           </span>
         </div>
 
-        <div className="max-w-lg">
-          <p className="mb-5 text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="relative z-10 max-w-lg"
+        >
+          <p className="mb-5 text-sm font-bold uppercase tracking-widest text-[var(--color-primary)]">
             Your freelance business
           </p>
 
-          <h1 className="text-5xl font-bold leading-tight">
+          <h1 className="text-5xl font-bold leading-tight tracking-tight">
             Projects, time and invoices in one flow.
           </h1>
 
-          <p className="mt-6 text-lg leading-8 text-slate-400">
+          <p className="mt-6 text-lg leading-relaxed text-slate-400">
             Manage clients, track billable work and stay on
-            top of your freelance finances.
+            top of your freelance finances with a beautifully crafted workspace.
           </p>
-        </div>
+        </motion.div>
 
-        <p className="text-sm text-slate-500">
-          FreelanceFlow · Business workspace
+        <p className="relative z-10 text-sm text-slate-500 font-medium">
+          FreelanceFlow · Premium Workspace
         </p>
       </section>
 
-      <section className="flex items-center justify-center bg-white px-6 py-12">
-        <div className="w-full max-w-md">
-          <div className="mb-10 lg:hidden">
+      <section className="flex items-center justify-center bg-white px-6 py-12 relative overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          className="w-full max-w-md relative z-10"
+        >
+          <div className="mb-10 lg:hidden flex justify-center">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-950 text-white">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-primary)] text-white shadow-lg shadow-blue-500/20">
                 <BriefcaseBusiness size={20} />
               </div>
-
-              <span className="text-xl font-bold text-slate-950">
+              <span className="text-xl font-bold text-slate-950 tracking-tight">
                 FreelanceFlow
               </span>
             </div>
           </div>
 
-          <div>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-950">
+          <div className="text-center lg:text-left">
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900">
               Welcome back
             </h2>
-
             <p className="mt-2 text-slate-500">
               Sign in to manage your freelance business.
             </p>
           </div>
 
-          {error && (
-            <div className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-              {error}
-            </div>
-          )}
-
-          <form
-            onSubmit={handleSubmit}
-            className="mt-8 space-y-5"
-          >
+          <form onSubmit={handleSubmit} className="mt-10 space-y-5">
             <div>
-              <label
-                htmlFor="email"
-                className="mb-2 block text-sm font-medium text-slate-700"
-              >
+              <label htmlFor="email" className="mb-2 block text-sm font-semibold text-slate-700">
                 Email address
               </label>
-
               <input
                 id="email"
                 name="email"
@@ -134,18 +118,14 @@ const LoginPage = () => {
                 autoComplete="email"
                 required
                 placeholder="you@example.com"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary)]/10"
               />
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="mb-2 block text-sm font-medium text-slate-700"
-              >
+              <label htmlFor="password" className="mb-2 block text-sm font-semibold text-slate-700">
                 Password
               </label>
-
               <input
                 id="password"
                 name="password"
@@ -155,36 +135,26 @@ const LoginPage = () => {
                 autoComplete="current-password"
                 required
                 placeholder="Enter your password"
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary)]/10"
               />
             </div>
 
-            <button
+            <Button
               type="submit"
-              disabled={submitting}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+              isLoading={submitting}
+              className="w-full h-12 text-base mt-2"
             >
-              {submitting && (
-                <LoaderCircle
-                  size={18}
-                  className="animate-spin"
-                />
-              )}
-
               {submitting ? "Signing in..." : "Sign in"}
-            </button>
+            </Button>
           </form>
 
           <p className="mt-8 text-center text-sm text-slate-500">
             New to FreelanceFlow?{" "}
-            <Link
-              to="/register"
-              className="font-semibold text-slate-950 hover:underline"
-            >
+            <Link to="/register" className="font-semibold text-[var(--color-primary)] hover:underline">
               Create an account
             </Link>
           </p>
-        </div>
+        </motion.div>
       </section>
     </main>
   );

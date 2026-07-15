@@ -25,9 +25,7 @@ export const getDashboard = async (req, res) => {
       prisma.invoice.findMany({
         where: {
           userId,
-          status: {
-            in: ["DRAFT", "SENT"],
-          },
+          status: "PENDING",
         },
         select: {
           id: true,
