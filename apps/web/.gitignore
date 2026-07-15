@@ -1,0 +1,14 @@
+node_modules/
+.env
+.env.local
+dist/
+build/
+coverage/
+.vscode/
+.idea/
+*.log
+
+apps/server/src/generated/prisma/
+
+.DS_Store
+Thumbs.db
