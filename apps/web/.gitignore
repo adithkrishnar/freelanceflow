@@ -10,5 +10,5 @@ coverage/
 
 apps/server/src/generated/prisma/
 
-.DS_Store
+.DS_Store 
 Thumbs.db
