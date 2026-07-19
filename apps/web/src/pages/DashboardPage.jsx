@@ -48,9 +48,9 @@ const formatDate = (date) => {
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="glass-dark rounded-xl px-4 py-3 shadow-lg border border-slate-700/50">
-        <p className="text-sm font-medium text-slate-300 mb-1">{label}</p>
-        <p className="text-lg font-bold text-white">
+      <div className="glass-dark rounded-xl px-4 py-3 shadow-xl border border-slate-700/50 backdrop-blur-md">
+        <p className="text-xs font-medium text-slate-400 mb-1 uppercase tracking-wider">{label}</p>
+        <p className="text-lg font-bold text-white tracking-tight">
           {formatCurrency(payload[0].value)}
         </p>
       </div>
@@ -106,36 +106,40 @@ const DashboardPage = () => {
       value: dashboard?.activeProjects || 0,
       icon: FolderKanban,
       description: "Currently in progress",
-      color: "bg-blue-500",
-      lightBg: "bg-blue-50",
-      textColor: "text-blue-500"
+      gradient: "from-indigo-500 to-indigo-600",
+      lightBg: "bg-indigo-50",
+      textColor: "text-indigo-600",
+      ringColor: "ring-indigo-100"
     },
     {
       label: "Pending Invoices",
       value: dashboard?.pendingInvoices || 0,
       icon: ReceiptText,
       description: "Awaiting payment",
-      color: "bg-amber-500",
+      gradient: "from-amber-400 to-amber-500",
       lightBg: "bg-amber-50",
-      textColor: "text-amber-500"
+      textColor: "text-amber-600",
+      ringColor: "ring-amber-100"
     },
     {
       label: "Outstanding",
       value: formatCurrency(dashboard?.outstandingPayments || 0),
       icon: IndianRupee,
       description: "Unpaid invoice value",
-      color: "bg-red-500",
-      lightBg: "bg-red-50",
-      textColor: "text-red-500"
+      gradient: "from-rose-400 to-rose-500",
+      lightBg: "bg-rose-50",
+      textColor: "text-rose-600",
+      ringColor: "ring-rose-100"
     },
     {
       label: "Upcoming Deadlines",
       value: dashboard?.upcomingDeadlines?.length || 0,
       icon: CalendarDays,
       description: "Tasks due soon",
-      color: "bg-emerald-500",
+      gradient: "from-emerald-400 to-emerald-500",
       lightBg: "bg-emerald-50",
-      textColor: "text-emerald-500"
+      textColor: "text-emerald-600",
+      ringColor: "ring-emerald-100"
     },
   ];
 
@@ -146,25 +150,23 @@ const DashboardPage = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
+      transition: { staggerChildren: 0.08 }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+    hidden: { opacity: 0, y: 15 },
+    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 350, damping: 25 } }
   };
 
   return (
-    <div className="p-6 lg:p-8 max-w-7xl mx-auto">
-      <header className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between mb-8">
+    <div className="w-full">
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">
             Overview
           </h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-slate-500 font-medium">
             Track your business performance and upcoming deadlines.
           </p>
         </div>
@@ -173,9 +175,9 @@ const DashboardPage = () => {
           onClick={handleLoadSampleData}
           isLoading={sampleLoading}
           variant="secondary"
-          className="shadow-sm border-slate-200/60"
+          className="shadow-sm bg-white"
         >
-          {!sampleLoading && <Database size={16} className="mr-2 text-slate-500" />}
+          {!sampleLoading && <Database size={16} className="mr-2 text-slate-400" />}
           {sampleLoading ? "Loading Data..." : "Load Sample Data"}
         </Button>
       </header>
@@ -193,23 +195,23 @@ const DashboardPage = () => {
             <motion.article
               variants={itemVariants}
               key={stat.label}
-              className="relative overflow-hidden rounded-2xl border border-slate-200/60 bg-white p-6 shadow-sm transition-all hover:shadow-md group"
+              className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group"
             >
-              <div className="absolute top-0 right-0 p-6 opacity-0 transition-opacity group-hover:opacity-10 translate-x-4 -translate-y-4 group-hover:translate-x-0 group-hover:translate-y-0 duration-500">
-                <Icon size={100} className={stat.textColor} />
-              </div>
+              {/* Subtle gradient background flourish on hover */}
+              <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${stat.gradient} opacity-0 transition-opacity group-hover:opacity-[0.03] rounded-full blur-3xl transform translate-x-10 -translate-y-10`}></div>
+              
               <div className="relative z-10 flex items-start justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-slate-500">
+                  <p className="text-sm font-medium text-slate-500">
                     {stat.label}
                   </p>
-                  <p className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
+                  <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
                     {stat.value}
                   </p>
                 </div>
 
-                <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${stat.lightBg} ${stat.textColor} shadow-sm`}>
-                  <Icon size={22} />
+                <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${stat.lightBg} ${stat.textColor} ring-1 inset-0 ${stat.ringColor} shadow-sm`}>
+                  <Icon size={20} strokeWidth={2.5} />
                 </div>
               </div>
 
@@ -225,32 +227,32 @@ const DashboardPage = () => {
         <motion.article 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="rounded-2xl border border-slate-200/60 bg-white p-6 shadow-sm"
+          transition={{ delay: 0.3 }}
+          className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm flex flex-col"
         >
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-lg font-bold text-slate-900">
+              <h2 className="text-base font-semibold text-slate-900">
                 Revenue Overview
               </h2>
               <p className="mt-1 text-sm text-slate-500">
                 Monthly revenue across all paid invoices.
               </p>
             </div>
-            <div className="rounded-lg bg-slate-50 p-2 text-slate-400 border border-slate-100">
-              <TrendingUp size={20} />
+            <div className="rounded-lg bg-indigo-50 p-2 text-indigo-500 border border-indigo-100/50">
+              <TrendingUp size={18} />
             </div>
           </div>
 
-          <div className="h-80 w-full">
+          <div className="h-[300px] w-full flex-1">
             {monthlyRevenue.length === 0 ? (
-              <div className="flex h-full items-center justify-center rounded-xl bg-slate-50 border border-dashed border-slate-200">
+              <div className="flex h-full items-center justify-center rounded-xl bg-slate-50/50 border border-dashed border-slate-200">
                 <div className="text-center">
                   <TrendingUp
-                    size={34}
-                    className="mx-auto text-slate-300"
+                    size={32}
+                    className="mx-auto text-slate-300 mb-3"
                   />
-                  <p className="mt-3 font-semibold text-slate-600">
+                  <p className="text-sm font-medium text-slate-600">
                     No revenue data yet
                   </p>
                   <p className="mt-1 text-xs text-slate-400">
@@ -260,27 +262,27 @@ const DashboardPage = () => {
               </div>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyRevenue} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <BarChart data={monthlyRevenue} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="#E2E8F0" />
                   <XAxis
                     dataKey="month"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: "#64748b", fontSize: 12 }}
-                    dy={10}
+                    tick={{ fill: "#64748b", fontSize: 12, fontWeight: 500 }}
+                    dy={12}
                   />
                   <YAxis
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: "#64748b", fontSize: 12 }}
+                    tick={{ fill: "#64748b", fontSize: 12, fontWeight: 500 }}
                     tickFormatter={(value) => `₹${Number(value) / 1000}k`}
                   />
-                  <Tooltip cursor={{ fill: "#f8fafc" }} content={<CustomTooltip />} />
+                  <Tooltip cursor={{ fill: "#F1F5F9", opacity: 0.4 }} content={<CustomTooltip />} />
                   <Bar
                     dataKey="revenue"
                     fill="var(--color-primary)"
-                    radius={[6, 6, 0, 0]}
-                    maxBarSize={45}
+                    radius={[4, 4, 0, 0]}
+                    maxBarSize={40}
                     animationDuration={1500}
                   />
                 </BarChart>
@@ -292,11 +294,11 @@ const DashboardPage = () => {
         <motion.article 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="flex flex-col rounded-2xl border border-slate-200/60 bg-white shadow-sm overflow-hidden"
+          transition={{ delay: 0.4 }}
+          className="flex flex-col rounded-2xl border border-slate-200/80 bg-white shadow-sm overflow-hidden"
         >
-          <div className="border-b border-slate-100 p-6 bg-slate-50/50">
-            <h2 className="text-lg font-bold text-slate-900">
+          <div className="border-b border-slate-100 p-5 bg-white">
+            <h2 className="text-base font-semibold text-slate-900">
               Upcoming Deadlines
             </h2>
             <p className="mt-1 text-sm text-slate-500">
@@ -304,14 +306,14 @@ const DashboardPage = () => {
             </p>
           </div>
 
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto max-h-[350px] scrollbar-thin scrollbar-thumb-slate-200">
             {upcomingDeadlines.length === 0 ? (
-              <div className="p-10 text-center h-full flex flex-col items-center justify-center">
+              <div className="p-8 text-center h-full flex flex-col items-center justify-center">
                 <CalendarDays
-                  size={34}
-                  className="mx-auto text-slate-300"
+                  size={32}
+                  className="mx-auto text-slate-300 mb-3"
                 />
-                <p className="mt-3 font-semibold text-slate-600">
+                <p className="text-sm font-medium text-slate-600">
                   All caught up!
                 </p>
                 <p className="mt-1 text-xs text-slate-400">
@@ -321,19 +323,19 @@ const DashboardPage = () => {
             ) : (
               <div className="divide-y divide-slate-100">
                 {upcomingDeadlines.map((task) => (
-                  <div key={task.id} className="p-5 transition hover:bg-slate-50/80">
-                    <div className="flex items-start gap-4">
-                      <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-50 text-amber-500 ring-1 ring-amber-100">
-                        <AlertCircle size={18} />
+                  <div key={task.id} className="p-4 transition-colors hover:bg-slate-50/80 group">
+                    <div className="flex items-start gap-3">
+                      <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-500 ring-1 ring-inset ring-amber-500/20">
+                        <AlertCircle size={16} />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="font-semibold text-slate-900 truncate">
+                        <p className="text-sm font-semibold text-slate-900 truncate group-hover:text-indigo-600 transition-colors">
                           {task.title}
                         </p>
-                        <p className="mt-0.5 truncate text-sm text-slate-500">
+                        <p className="mt-0.5 truncate text-xs text-slate-500 font-medium">
                           {task.project?.name || "Unknown project"}
                         </p>
-                        <div className="mt-2 inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
+                        <div className="mt-2 inline-flex items-center rounded-md bg-slate-100/80 px-2 py-1 text-[11px] font-medium text-slate-600 ring-1 ring-inset ring-slate-200/50">
                           <CalendarDays size={12} className="mr-1.5 text-slate-400" />
                           Due {formatDate(task.dueDate)}
                         </div>

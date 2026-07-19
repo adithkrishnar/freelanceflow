@@ -33,9 +33,9 @@ const formatCurrency = (value) =>
   }).format(Number(value || 0));
 
 const getBurnRateStyle = (burnRate) => {
-  if (burnRate >= 100) return { bar: "bg-red-500", text: "text-red-600" };
-  if (burnRate >= 75) return { bar: "bg-amber-500", text: "text-amber-600" };
-  return { bar: "bg-emerald-500", text: "text-emerald-600" };
+  if (burnRate >= 100) return { bar: "bg-rose-500", text: "text-rose-600", track: "bg-rose-100" };
+  if (burnRate >= 75) return { bar: "bg-amber-500", text: "text-amber-600", track: "bg-amber-100" };
+  return { bar: "bg-emerald-500", text: "text-emerald-600", track: "bg-emerald-100" };
 };
 
 const ProjectsPage = () => {
@@ -156,12 +156,12 @@ const ProjectsPage = () => {
       header: "Project",
       render: (row) => (
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
-            <FolderKanban size={18} />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 ring-1 ring-inset ring-indigo-500/10 shadow-sm">
+            <FolderKanban size={18} strokeWidth={2.5} />
           </div>
           <div>
-            <p className="font-semibold text-slate-900">{row.name}</p>
-            <p className="text-xs text-slate-500 truncate max-w-[200px]">{row.description || "No description"}</p>
+            <p className="font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">{row.name}</p>
+            <p className="text-xs font-medium text-slate-500 truncate max-w-[200px]">{row.description || "No description"}</p>
           </div>
         </div>
       ),
@@ -169,7 +169,7 @@ const ProjectsPage = () => {
     {
       header: "Client",
       render: (row) => (
-        <div className="flex items-center gap-2 text-sm text-slate-600">
+        <div className="flex items-center gap-2 text-sm font-medium text-slate-600">
           <Building2 size={16} className="text-slate-400" />
           <span>{row.client?.name || "Unknown"}</span>
         </div>
@@ -186,18 +186,18 @@ const ProjectsPage = () => {
         const burnPercentage = burnRate?.burnRate || 0;
         const burnStyle = getBurnRateStyle(burnPercentage);
         return (
-          <div className="w-48">
-            <div className="flex justify-between text-xs font-medium mb-1.5">
-              <span className="text-slate-600">{formatCurrency(burnRate?.amountSpent || 0)}</span>
+          <div className="w-48 group/progress">
+            <div className="flex justify-between text-xs font-semibold mb-2">
+              <span className="text-slate-700">{formatCurrency(burnRate?.amountSpent || 0)}</span>
               <span className={burnStyle.text}>{burnPercentage}%</span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+            <div className={`h-1.5 w-full overflow-hidden rounded-full ${burnStyle.track}`}>
               <div 
-                className={`h-full rounded-full ${burnStyle.bar}`} 
+                className={`h-full rounded-full ${burnStyle.bar} transition-all duration-500 ease-out`} 
                 style={{ width: `${Math.min(burnPercentage, 100)}%` }}
               />
             </div>
-            <p className="text-[10px] text-slate-400 mt-1">Budget: {formatCurrency(row.budget)}</p>
+            <p className="text-[10px] font-medium text-slate-400 mt-1.5 opacity-0 group-hover/progress:opacity-100 transition-opacity">Budget: {formatCurrency(row.budget)}</p>
           </div>
         );
       },
@@ -206,16 +206,16 @@ const ProjectsPage = () => {
       header: "Actions",
       cellClassName: "text-right",
       render: (row) => (
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end gap-1.5 opacity-80 transition-opacity hover:opacity-100">
           <button
             onClick={(e) => { e.stopPropagation(); handleEdit(row); }}
-            className="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-900"
+            className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
           >
             <Pencil size={16} />
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); handleDelete(row); }}
-            className="rounded-lg p-2 text-slate-400 transition hover:bg-red-50 hover:text-red-600"
+            className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-rose-50 hover:text-rose-600"
           >
             <Trash2 size={16} />
           </button>
@@ -226,25 +226,25 @@ const ProjectsPage = () => {
 
   if (loading) {
     return (
-      <div className="p-6 lg:p-8 max-w-7xl mx-auto">
+      <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
         <TableSkeleton />
       </div>
     );
   }
 
   return (
-    <div className="p-6 lg:p-8 max-w-7xl mx-auto">
-      <header className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between mb-8">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">
             Projects
           </h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm font-medium text-slate-500">
             Manage projects, budgets and track burn rates.
           </p>
         </div>
 
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
@@ -286,27 +286,27 @@ const ProjectsPage = () => {
         title={editingProject ? "Edit Project" : "Add Project"}
         description="Configure project and budget information."
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Project Name</label>
+            <label className="mb-1.5 block text-sm font-semibold text-slate-700">Project Name</label>
             <input
               name="name"
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]"
+              className="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none transition-all focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
             />
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-5 sm:grid-cols-2">
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-700">Client</label>
+              <label className="mb-1.5 block text-sm font-semibold text-slate-700">Client</label>
               <select
                 name="clientId"
                 value={formData.clientId}
                 onChange={handleChange}
                 required
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white outline-none transition focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]"
+                className="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm bg-white outline-none transition-all focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
               >
                 <option value="">Select client</option>
                 {clients.map((client) => (
@@ -316,12 +316,12 @@ const ProjectsPage = () => {
             </div>
             
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-700">Status</label>
+              <label className="mb-1.5 block text-sm font-semibold text-slate-700">Status</label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white outline-none transition focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]"
+                className="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm bg-white outline-none transition-all focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
               >
                 <option value="ACTIVE">Active</option>
                 <option value="COMPLETED">Completed</option>
@@ -330,7 +330,7 @@ const ProjectsPage = () => {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Budget (₹)</label>
+            <label className="mb-1.5 block text-sm font-semibold text-slate-700">Budget (₹)</label>
             <input
               name="budget"
               type="number"
@@ -339,18 +339,18 @@ const ProjectsPage = () => {
               value={formData.budget}
               onChange={handleChange}
               required
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]"
+              className="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none transition-all focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
             />
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Description</label>
+            <label className="mb-1.5 block text-sm font-semibold text-slate-700">Description</label>
             <textarea
               name="description"
               rows={3}
               value={formData.description}
               onChange={handleChange}
-              className="w-full resize-none rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]"
+              className="w-full resize-none rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none transition-all focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
             />
           </div>
 

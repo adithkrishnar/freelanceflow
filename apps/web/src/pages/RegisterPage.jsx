@@ -48,12 +48,12 @@ const RegisterPage = () => {
 
   return (
     <main className="grid min-h-screen lg:grid-cols-2">
-      <section className="relative hidden bg-slate-950 p-12 text-white lg:flex lg:flex-col lg:justify-between overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-tr from-[var(--color-primary)]/20 to-transparent pointer-events-none" />
+      <section className="relative hidden bg-[#0B0F19] p-12 text-white lg:flex lg:flex-col lg:justify-between overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600/20 to-transparent pointer-events-none" />
         
         <div className="relative z-10 flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[var(--color-primary)]">
-            <BriefcaseBusiness size={22} />
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 shadow-md ring-1 ring-indigo-500/50">
+            <BriefcaseBusiness size={22} className="text-white" />
           </div>
           <span className="text-xl font-bold tracking-tight">
             FreelanceFlow
@@ -66,7 +66,7 @@ const RegisterPage = () => {
           transition={{ delay: 0.2 }}
           className="relative z-10 max-w-lg"
         >
-          <p className="mb-5 text-sm font-bold uppercase tracking-widest text-[var(--color-primary)]">
+          <p className="mb-5 text-sm font-bold uppercase tracking-widest text-indigo-400">
             Built for freelancers
           </p>
 
@@ -74,7 +74,7 @@ const RegisterPage = () => {
             Run your freelance business with clarity.
           </h1>
 
-          <p className="mt-6 text-lg leading-relaxed text-slate-400">
+          <p className="mt-6 text-lg font-medium leading-relaxed text-slate-400">
             Organize clients, manage projects, track billable
             hours and turn your work into invoices from one premium workspace.
           </p>
@@ -94,10 +94,10 @@ const RegisterPage = () => {
         >
           <div className="mb-10 lg:hidden flex justify-center">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-primary)] text-white shadow-lg shadow-blue-500/20">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-500/20">
                 <BriefcaseBusiness size={20} />
               </div>
-              <span className="text-xl font-bold text-slate-950 tracking-tight">
+              <span className="text-xl font-bold text-slate-900 tracking-tight">
                 FreelanceFlow
               </span>
             </div>
@@ -107,7 +107,7 @@ const RegisterPage = () => {
             <h2 className="text-3xl font-bold tracking-tight text-slate-900">
               Create your account
             </h2>
-            <p className="mt-2 text-slate-500">
+            <p className="mt-2 text-slate-500 font-medium">
               Start managing your freelance business.
             </p>
           </div>
@@ -126,7 +126,7 @@ const RegisterPage = () => {
                 autoComplete="name"
                 required
                 placeholder="Your full name"
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary)]/10"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
               />
             </div>
 
@@ -143,7 +143,7 @@ const RegisterPage = () => {
                 autoComplete="email"
                 required
                 placeholder="you@example.com"
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary)]/10"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
               />
             </div>
 
@@ -161,22 +161,22 @@ const RegisterPage = () => {
                 required
                 minLength={6}
                 placeholder="Minimum 6 characters"
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary)]/10"
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
               />
             </div>
 
             <Button
               type="submit"
               isLoading={submitting}
-              className="w-full h-12 text-base mt-2"
+              className="w-full h-12 text-base mt-2 bg-indigo-600 hover:bg-indigo-700 border-indigo-600"
             >
               {submitting ? "Creating account..." : "Create account"}
             </Button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-slate-500">
+          <p className="mt-8 text-center text-sm font-medium text-slate-500">
             Already have an account?{" "}
-            <Link to="/login" className="font-semibold text-[var(--color-primary)] hover:underline">
+            <Link to="/login" className="font-semibold text-indigo-600 hover:text-indigo-500 hover:underline">
               Sign in
             </Link>
           </p>
