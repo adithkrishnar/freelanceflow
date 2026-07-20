@@ -12,7 +12,7 @@ Instead of switching between spreadsheets, task managers, and invoicing tools, f
 
 ### Frontend (Vercel)
 
-🔗 https://freelanceflow-iiqzfcubc-akr2.vercel.app
+🔗 freelanceflow-roan.vercel.app
 
 ### Backend API (Render)
 
