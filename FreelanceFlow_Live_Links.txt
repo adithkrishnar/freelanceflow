@@ -1,0 +1,20 @@
+FreelanceFlow - Live Links
+
+Frontend (Vercel): freelanceflow-roan.vercel.app
+
+Backend API (Render) https://freelanceflow-qrcx.onrender.com
+
+Suggested API Base URL https://freelanceflow-qrcx.onrender.com/api
+
+Suggested Health Endpoint
+https://freelanceflow-qrcx.onrender.com/api/health
+
+GitHub Repository :
+https://github.com/adithkrishnar/freelanceflow.git
+
+Project Summary FreelanceFlow is a full-stack SaaS platform for
+freelancers featuring: - JWT Authentication - Client Management -
+Project Management - Task Management - Time Tracking - PDF Invoice
+Generation - Dashboard & Analytics - Sample Data Loader
+
+Deployment Frontend: Vercel Backend: Render Database: Neon PostgreSQL
